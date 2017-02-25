@@ -1,0 +1,21 @@
+{
+  "name": "Neighborhood Map",
+  "authors": [
+    "Diana Fisher <diana.fisher@gmail.com>"
+  ],
+  "description": "A neighborhood map app.",
+  "main": "app",
+  "keywords": [
+    "map"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
