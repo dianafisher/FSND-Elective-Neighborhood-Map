@@ -4,12 +4,6 @@
     "Diana Fisher <diana.fisher@gmail.com>"
   ],
   "description": "A neighborhood map app.",
-  "main": "app",
-  "keywords": [
-    "map"
-  ],
-  "license": "MIT",
-  "homepage": "",
   "private": true,
   "ignore": [
     "**/.*",
@@ -17,5 +11,8 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "knockout": "~3.4.1"
+  }
 }
