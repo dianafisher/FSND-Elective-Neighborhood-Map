@@ -56,10 +56,10 @@ module.exports = function(grunt) {
             files: '<%= jshint.gruntfile.src %>',
             tasks: ['jshint:gruntfile']
           },
-          src: {
-            files: '<%= jshint.app.src %>',
-            tasks: ['jshint:src']
-          },
+          // src: {
+          //   files: '<%= jshint.app.src %>',
+          //   tasks: ['jshint:src']
+          // },
           test: {
             files: '<%= jshint.test.src %>',
             tasks: ['jshint:test']
