@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>Neighborhood Map App</title>
 
+    <link rel="stylesheet"  href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
+
     <style>
       /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
@@ -20,9 +22,17 @@
 
 </head>
 <body>
-   <!--  <h1>It works! HAHAHAHAHA</h1>
-  <div>
-    <ul id="cat-list" data-bind="foreach: cats">
+  <div class="container">
+    <div class="page-header">
+      <h1>San Francisco Film Locations</h1>
+    </div>
+    <div class="row">
+      <ul id="location-list" data-bind="foreach: locations">
+        <li data-bind="text: title"></li>
+      </ul>
+
+    </div>
+    <!-- <ul id="cat-list" data-bind="foreach: cats">
         <li data-bind="text: name, click: $parent.catClicked"></li>
     </ul>
     <div id="cat" data-bind="with: currentCat">

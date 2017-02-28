@@ -25,10 +25,10 @@ get(endpoint).then(function(response) {
     console.error("Failed!", error);
 });
 
-//http://api.themoviedb.org/3/search/movie?api_key=APIKEY&query=MOVIENAME
-get('https://api.themoviedb.org/3/search/movie?api_key=9c8b8a24a248fed2e25eb1f8d2f29d13&language=en-US&query=180&page=1&include_adult=false&year=2011').then(function(response) {
-    console.log('Success!', response);
-});
+// //http://api.themoviedb.org/3/search/movie?api_key=APIKEY&query=MOVIENAME
+// get('https://api.themoviedb.org/3/search/movie?api_key=9c8b8a24a248fed2e25eb1f8d2f29d13&language=en-US&query=180&page=1&include_adult=false&year=2011').then(function(response) {
+//     console.log('Success!', response);
+// });
 
 
 // get(sf_endpoint).then(function(response) {
@@ -104,39 +104,56 @@ var Place = function(data) {
 
 var Location = function(data) {
     var self = this;
-    geocoder.geocode(
-        {'address': data.locations},
-        function(results, status){
-            if (status === 'OK') {
-                console.log(data);
-                console.log(results.length);
-                results.forEach(result => {
-                    console.log(result.formatted_address);
-                });
-                console.log(results[0].geometry.location);
-                console.log(results[0].formatted_address);
-                var marker = new google.maps.Marker({
-                    map: map,
-                    position: results[0].geometry.location
-                });
-                self.marker = ko.observable(marker);
-                google.maps.event.addListener(marker, 'click', function(){
-                    viewModel.markerClicked(self);
-                });
 
-                // Generate the content string
-                var content =   '<div id="content">' +
-                                    '<div id="siteNotice">' + '</div>' +
-                                    '<h1 id="heading" class="heading">' + data.title  + '</h1>' +
-                                '</div>';
+    console.log(data);
+    this.actor_1 = data.actor_1;
+    this.actor_2 = data.actor_2;
+    this.actor_3 = data.actor_3;
+    this.director = data.director;
+    this.distributor = data.distributor;
+    this.locations = data.locations;
+    this.production_company = data.production_company;
+    this.release_year = data.release_year;
+    this.title = data.title;
+    this.writer = data.writer;
 
-                self.contentString = ko.observable(content);
+    this.geocodeAddress = function() {
+        geocoder.geocode(
+            {'address': data.locations},
+            function(results, status){
+                if (status === 'OK') {
+                    console.log(data);
+                    console.log(results.length);
+                    results.forEach(result => {
+                        console.log(result.formatted_address);
+                    });
+                    console.log(results[0].geometry.location);
+                    console.log(results[0].formatted_address);
+                    var marker = new google.maps.Marker({
+                        map: map,
+                        position: results[0].geometry.location
+                    });
+                    self.marker = ko.observable(marker);
+                    google.maps.event.addListener(marker, 'click', function(){
+                        viewModel.markerClicked(self);
+                    });
 
-            } else {
-                console.error('Geocode was not successful for the following reason: ' + status);
-            }
+                    // Generate the content string
+                    var content =   '<div id="content">' +
+                                        '<div id="siteNotice">' + '</div>' +
+                                        '<h1 id="heading" class="heading">' + data.title  + '</h1>' +
+                                    '</div>';
 
-        });
+                    self.contentString = ko.observable(content);
+
+                } else {
+                    console.error('Geocode was not successful for the following reason: ' + status);
+                }
+
+            });
+    };
+
+
 };
 
 var ViewModel = function() {
