@@ -21,6 +21,28 @@ get(endpoint).then(function(response) {
     //     console.log(entry);
     // });
 
+    // const transportation = data.reduce(function(obj, item) {
+    //   if (!obj[item]) {
+    //     obj[item] = 0;
+    //   }
+    //   obj[item]++;
+    //   return obj;
+    // }, {});
+
+    // Group the data by title
+    const result = data.reduce((total, entry) => {
+        return total + (entry.title === 'Americana');
+    }, 0);
+    console.log(result);
+
+    const grouped = [...data.reduce((hash, {locations, title}) => {
+        const current = hash.get(title) || {title, _locations: []};
+        current._locations.push({locations});
+        return hash.set(title, current);
+    }, new Map).values()];
+
+    console.log(grouped);
+
 }, function(error){
     console.error("Failed!", error);
 });
