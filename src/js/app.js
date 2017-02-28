@@ -1,9 +1,39 @@
 
+// Hard coded locations for San Andreas in the event the server is down.
+const san_andreas = [
+{"actor_1":"Dwayne Johnson","director":"Brad Peyton","distributor":"Warner Bros.","locations":"2nd St. at Townsend St.","production_company":"Upside Down Productions, Inc.","release_year":"2015","title":"San Andreas","writer":"Allan Loeb "},
+{"actor_1":"Dwayne Johnson","director":"Brad Peyton","distributor":"Warner Bros.","locations":"Jefferson St. at Powell St.","production_company":"Upside Down Productions, Inc.","release_year":"2015","title":"San Andreas","writer":"Allan Loeb "},
+{"actor_1":"Dwayne Johnson","director":"Brad Peyton","distributor":"Warner Bros.","fun_facts":"Characters walk down street and it's totally wrecked from a massive earthquake","locations":"Grant St. at Bush St.","production_company":"Upside Down Productions, Inc.","release_year":"2015","title":"San Andreas","writer":"Allan Loeb "},
+{"actor_1":"Dwayne Johnson","director":"Brad Peyton","distributor":"Warner Bros.","locations":"Vallejo Garage Roof (Vallejo at Powell)","production_company":"Upside Down Productions, Inc.","release_year":"2015","title":"San Andreas","writer":"Allan Loeb "},
+{"actor_1":"Dwayne Johnson","director":"Brad Peyton","distributor":"Warner Bros.","fun_facts":"3 characters walk down the street. An earthquake shakes the city and stuff starts breaking. One character gets a shard of glass stuck in his leg.","locations":"Clay St. at Taylor","production_company":"Upside Down Productions, Inc.","release_year":"2015","title":"San Andreas","writer":"Allan Loeb "},
+{"actor_1":"Dwayne Johnson","director":"Brad Peyton","distributor":"Warner Bros.","locations":"Bay St. at Polk","production_company":"Upside Down Productions, Inc.","release_year":"2015","title":"San Andreas","writer":"Allan Loeb "},
+{"actor_1":"Dwayne Johnson","director":"Brad Peyton","distributor":"Warner Bros.","locations":"Intersection of Lombard and Hyde","production_company":"Upside Down Productions, Inc.","release_year":"2015","title":"San Andreas","writer":"Allan Loeb "},
+{"actor_1":"Dwayne Johnson","director":"Brad Peyton","distributor":"Warner Bros.","locations":"Mission between 3rd and 4th St.","production_company":"Upside Down Productions, Inc.","release_year":"2015","title":"San Andreas","writer":"Allan Loeb "},
+{"actor_1":"Dwayne Johnson","director":"Brad Peyton","distributor":"Warner Bros.","fun_facts":"Characters walk out of broken window of 555 California out to Kearny St. Splinter unit films a car driving into the garage at 555 California","locations":"555 California","production_company":"Upside Down Productions, Inc.","release_year":"2015","title":"San Andreas","writer":"Allan Loeb "},
+{"actor_1":"Dwayne Johnson","director":"Brad Peyton","distributor":"Warner Bros.","locations":"Broadway and Kearney","production_company":"Upside Down Productions, Inc.","release_year":"2015","title":"San Andreas","writer":"Allan Loeb "},
+{"actor_1":"Dwayne Johnson","director":"Brad Peyton","distributor":"Warner Bros.","locations":"Grant between Bush and Market","production_company":"Upside Down Productions, Inc.","release_year":"2015","title":"San Andreas","writer":"Allan Loeb "},
+{"actor_1":"Dwayne Johnson","director":"Brad Peyton","distributor":"Warner Bros.","locations":"Coit Tower","production_company":"Upside Down Productions, Inc.","release_year":"2015","title":"San Andreas","writer":"Allan Loeb "},
+{"actor_1":"Dwayne Johnson","director":"Brad Peyton","distributor":"Warner Bros.","locations":"TransAmerica Pyramid (600 Montgomery Street)","production_company":"Upside Down Productions, Inc.","release_year":"2015","title":"San Andreas","writer":"Allan Loeb "},
+{"actor_1":"Dwayne Johnson","director":"Brad Peyton","distributor":"Warner Bros.","locations":"Washington Square","production_company":"Upside Down Productions, Inc.","release_year":"2015","title":"San Andreas","writer":"Allan Loeb "},
+{"actor_1":"Dwayne Johnson","director":"Brad Peyton","distributor":"Warner Bros.","locations":"Battery Spencer","production_company":"Upside Down Productions, Inc.","release_year":"2015","title":"San Andreas","writer":"Allan Loeb "},
+{"actor_1":"Dwayne Johnson","director":"Brad Peyton","distributor":"Warner Bros.","fun_facts":"Bystanders watch as a tsunami crashes over them","locations":"Pier 43","production_company":"Upside Down Productions, Inc.","release_year":"2015","title":"San Andreas","writer":"Allan Loeb "},
+{"actor_1":"Dwayne Johnson","director":"Brad Peyton","distributor":"Warner Bros.","fun_facts":"Characters watch from roof of garage as tsunami hits SF waterfront","locations":"Vallejo St. Garage, 766 Vallejo St.","production_company":"Upside Down Productions, Inc.","release_year":"2015","title":"San Andreas","writer":"Allan Loeb "},
+{"actor_1":"Dwayne Johnson","director":"Brad Peyton","distributor":"Warner Bros.","locations":"Fort Baker","production_company":"Upside Down Productions, Inc.","release_year":"2015","title":"San Andreas","writer":"Allan Loeb "},
+{"actor_1":"Dwayne Johnson","director":"Brad Peyton","distributor":"Warner Bros.","fun_facts":"3 characters run out of stadium, there is a group of people on the sidewalk, an earthquake hits, and they duck for cover","locations":"AT&T Stadium","production_company":"Upside Down Productions, Inc.","release_year":"2015","title":"San Andreas","writer":"Allan Loeb "},
+{"actor_1":"Dwayne Johnson","director":"Brad Peyton","distributor":"Warner Bros.","fun_facts":"two paragliders land on the field of AT&T Park","locations":"AT&T Stadium","production_company":"Upside Down Productions, Inc.","release_year":"2015","title":"San Andreas","writer":"Allan Loeb "},
+{"actor_1":"Dwayne Johnson","director":"Brad Peyton","distributor":"Warner Bros.","fun_facts":"Characters drive in a high speed picture boat to see different views of the city.","locations":"Water work in SF Bay","production_company":"Upside Down Productions, Inc.","release_year":"2015","title":"San Andreas","writer":"Allan Loeb "},
+{"actor_1":"Dwayne Johnson","director":"Brad Peyton","distributor":"Warner Bros.","locations":"Stage Work, 47 Julian St.","production_company":"Upside Down Productions, Inc.","release_year":"2015","title":"San Andreas","writer":"Allan Loeb "},
+{"actor_1":"Dwayne Johnson","director":"Brad Peyton","distributor":"Warner Bros.","fun_facts":"Characters walk to get a vantage point for Coit tower. 250 actors walking \"fleeing\" the city after earthquake","locations":"Hyde St. at Greenwich and Hyde St. at Lombard","production_company":"Upside Down Productions, Inc.","release_year":"2015","title":"San Andreas","writer":"Allan Loeb "},
+{"actor_1":"Dwayne Johnson","director":"Brad Peyton","distributor":"Warner Bros.","fun_facts":"Characters look for a form of communication with LA in a post-quake trashed city","locations":"Asia Star Fantasy, 1126 Grant Ave.","production_company":"Upside Down Productions, Inc.","release_year":"2015","title":"San Andreas","writer":"Allan Loeb "}
+];
+
 // Endpoint for SF OpenData
 const endpoint = 'https://data.sfgov.org/resource/wwmu-gmzc.json';
+// const endpoint = 'https://data.sfgov.org/resource-wrong/wwmu-gmzc.json';
 
 var titles = [];
 var viewModel;
+
 
 get(endpoint).then(function(response) {
     // console.log('Success!', response);
@@ -11,32 +41,6 @@ get(endpoint).then(function(response) {
 
     const data = JSON.parse(response);
     // console.log(data);
-
-    // data.forEach(entry => {
-    //     console.log(entry);
-    // });
-
-    // const transportation = data.reduce(function(obj, item) {
-    //   if (!obj[item]) {
-    //     obj[item] = 0;
-    //   }
-    //   obj[item]++;
-    //   return obj;
-    // }, {});
-
-    // Group the data by title
-    // const result = data.reduce((total, entry) => {
-    //     return total + (entry.title === 'Americana');
-    // }, 0);
-    // console.log(result);
-
-    // const grouped = [...data.reduce((hash, {locations, title}) => {
-    //     const current = hash.get(title) || {title, _locations: []};
-    //     current._locations.push({locations});
-    //     return hash.set(title, current);
-    // }, new Map()).values()];
-
-    // console.log(grouped);
 
     const grouped = groupByTitle(data);
     console.log(grouped);
@@ -49,9 +53,14 @@ get(endpoint).then(function(response) {
     viewModel = new ViewModel();
     ko.applyBindings(viewModel);
 
-
 }, function(error){
+    // If the endpoint fails for some reason, load the San Andreas data.
     console.error("Failed!", error);
+
+    titles = groupByTitle(san_andreas);
+
+    viewModel = new ViewModel();
+    ko.applyBindings(viewModel);
 });
 
 
