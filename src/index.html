@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Neighborhood Map App</title>
+    <title>SF Film Locations</title>
 
     <link rel="stylesheet"  href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
 
@@ -30,7 +30,7 @@
       <ul id="location-list" data-bind="foreach: locations">
         <li data-bind="text: title"></li>
       </ul>
-
+      <div id="map"></div>
     </div>
     <!-- <ul id="cat-list" data-bind="foreach: cats">
         <li data-bind="text: name, click: $parent.catClicked"></li>
@@ -50,10 +50,11 @@
             </li>
         </ul>
     </div> -->
-    <div id="map"></div>
+
 
   </div>
   <script src="../bower_components/knockout/dist/knockout.js"></script>
+  <script type="text/javascript" src="locations.json"></script>
   <script src="js/map.js"></script>
   <script src="js/app.js"></script>
 

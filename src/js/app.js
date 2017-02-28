@@ -1,21 +1,16 @@
 
-// Construct the catalog query string
-// const endpoint = 'http://data.ct.gov/resource/9k2y-kqxn.json?organization_type=Public%20School%20Districts&$$app_token=CGxaHQoQlgQSev4zyUh5aR5J3';
+// Endpoint for SF OpenData
 const endpoint = 'https://data.sfgov.org/resource/wwmu-gmzc.json';
 
-var data = [];
+var titles = [];
 var viewModel;
-
 
 get(endpoint).then(function(response) {
     // console.log('Success!', response);
     console.log('Success!');
 
-    data = JSON.parse(response);
+    const data = JSON.parse(response);
     // console.log(data);
-
-    viewModel = new ViewModel();
-    ko.applyBindings(viewModel);
 
     // data.forEach(entry => {
     //     console.log(entry);
@@ -30,22 +25,53 @@ get(endpoint).then(function(response) {
     // }, {});
 
     // Group the data by title
-    const result = data.reduce((total, entry) => {
-        return total + (entry.title === 'Americana');
-    }, 0);
-    console.log(result);
+    // const result = data.reduce((total, entry) => {
+    //     return total + (entry.title === 'Americana');
+    // }, 0);
+    // console.log(result);
 
-    const grouped = [...data.reduce((hash, {locations, title}) => {
-        const current = hash.get(title) || {title, _locations: []};
-        current._locations.push({locations});
-        return hash.set(title, current);
-    }, new Map).values()];
+    // const grouped = [...data.reduce((hash, {locations, title}) => {
+    //     const current = hash.get(title) || {title, _locations: []};
+    //     current._locations.push({locations});
+    //     return hash.set(title, current);
+    // }, new Map()).values()];
 
+    // console.log(grouped);
+
+    const grouped = groupByTitle(data);
     console.log(grouped);
+
+    // sort the array by title
+    titles = grouped.sort(function(previous, next){
+       return previous.title > next.title ? 1 : -1;
+    });
+
+    viewModel = new ViewModel();
+    ko.applyBindings(viewModel);
+
 
 }, function(error){
     console.error("Failed!", error);
 });
+
+
+function groupByTitle(orig) {
+    var newArr = [],
+        titles = {},
+        i, j, cur;
+
+    for (i = 0, j = orig.length; i < j; i++) {
+        cur = orig[i];
+        if (!(cur.title in titles)) {
+            titles[cur.title] = {title: cur.title, entries: []};
+            newArr.push(titles[cur.title]);
+        }
+        titles[cur.title].entries.push(cur);
+    }
+    return newArr;
+}
+
+
 
 // //http://api.themoviedb.org/3/search/movie?api_key=APIKEY&query=MOVIENAME
 // get('https://api.themoviedb.org/3/search/movie?api_key=9c8b8a24a248fed2e25eb1f8d2f29d13&language=en-US&query=180&page=1&include_adult=false&year=2011').then(function(response) {
@@ -127,7 +153,7 @@ var Place = function(data) {
 var Location = function(data) {
     var self = this;
 
-    console.log(data);
+    console.log('creating Location for', data);
     this.actor_1 = data.actor_1;
     this.actor_2 = data.actor_2;
     this.actor_3 = data.actor_3;
@@ -183,10 +209,10 @@ var ViewModel = function() {
     var self = this;
 
     this.locations = ko.observableArray([]);
-    // console.log(data);
+    console.log(titles);
 
     // Create a new Location object for each item in the array.
-    data.forEach(function(location){
+    titles.forEach(function(location){
         self.locations.push( new Location(location) );
     });
 
