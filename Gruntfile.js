@@ -93,7 +93,10 @@ module.exports = function(grunt) {
                 options: {
                     watchTask: true,
                     server: {
-                        baseDir: "./src"
+                        baseDir: "./src",
+                        routes:{
+                          "/bower_components" : "bower_components"
+                        }
                     }
                 }
             }
