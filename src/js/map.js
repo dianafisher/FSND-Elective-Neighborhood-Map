@@ -16,44 +16,8 @@ function initMap() {
   };
 
   map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
   viewModel = new ViewModel();
   ko.applyBindings(viewModel);
 }
-
-function toggleBounce(marker) {
-  if (marker.getAnimation() !== null) {
-    marker.setAnimation(null);
-  } else {
-    marker.setAnimation(google.maps.Animation.BOUNCE);
-  }
-}
-
-function requestListener() {
-    if (this.readyState === 4 && this.status === 200) {
-      console.log("success!");
-      console.log(this);
-      // console.log(this.response);
-      var data = JSON.parse(this.response);
-      data.forEach(entry => {
-          // console.log(entry);
-
-        var infowindow = new google.maps.InfoWindow({
-          content: entry.location_1.human_address
-        });
-
-          marker = new google.maps.Marker({
-          position: new google.maps.LatLng(entry.location_1.latitude, entry.location_1.longitude),
-               map: map,
-              title: 'Hello, World!',
-              animation: google.maps.Animation.DROP,
-          });
-          marker.addListener('click', toggleBounce);
-
-          // console.log(entry.location_1.human_address);
-
-      });
-    } else {
-      console.log("oops, something went wrong");
-    }
-  }
 
