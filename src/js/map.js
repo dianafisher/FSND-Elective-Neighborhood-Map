@@ -16,6 +16,8 @@ function initMap() {
   };
 
   map = new google.maps.Map(document.getElementById("map"), mapOptions);
+  viewModel = new ViewModel();
+  ko.applyBindings(viewModel);
 }
 
 function toggleBounce(marker) {
