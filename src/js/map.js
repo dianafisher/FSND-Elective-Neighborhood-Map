@@ -6,7 +6,6 @@ var styles = [{"featureType":"landscape.man_made","elementType":"geometry.fill",
 function initMap() {
 //@37.7494945,-122.2824239
   var center = new google.maps.LatLng(37.7494945,-122.2824239);
-  geocoder = new google.maps.Geocoder();
 
   // Intialize our map
   var mapOptions = {
@@ -16,6 +15,7 @@ function initMap() {
   };
 
   map = new google.maps.Map(document.getElementById("map"), mapOptions);
+  google.maps.event.addDomListener(window, 'load', initialize);
 
   viewModel = new ViewModel();
   ko.applyBindings(viewModel);

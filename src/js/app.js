@@ -11,6 +11,27 @@ const locations = [{"actor_1":"Candice Bergen","actor_2":"Giancarlo Gianni","dir
 //     console.log('Success!', response);
 // });
 
+var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
+
+var icons = {
+  parking: {
+    icon: iconBase + 'parking_lot_maps.png'
+  },
+  library: {
+    icon: iconBase + 'library_maps.png'
+  },
+  info: {
+    icon: iconBase + 'info-i_maps.png'
+  },
+  film: {
+    icon: 'img/clapperboard.png'
+  }
+};
+
+function initialize() {
+    console.log('initialize!!');
+}
+
 
 var Location = function(data) {
     var self = this;
@@ -34,7 +55,8 @@ var Location = function(data) {
     var coords = new google.maps.LatLng(this.lat(), this.lng());
     var marker = new google.maps.Marker({
         position: coords,
-        map: map
+        map: map,
+        icon: icons['film'].icon,
     });
     this.marker = ko.observable(marker);
     google.maps.event.addListener(marker, 'click', function(){
@@ -71,6 +93,9 @@ var ViewModel = function() {
         console.log('ViewModel: location clicked!');
 
         console.log(this);
+
+        // clear any marker that is currently bouncing.
+        self.currentLocation().marker().setAnimation(null);
 
         // update the current title
         self.currentLocation(this);
@@ -132,4 +157,3 @@ function get(url) {
     req.send();
   });
 }
-
