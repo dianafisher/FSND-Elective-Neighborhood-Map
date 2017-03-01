@@ -109,7 +109,18 @@ var codeAddress = function(address) {
 var Location = function(data) {
     var self = this;
 
+    this.actor_1 = data.actor_1;
+    this.actor_2 = data.actor_2;
+    this.actor_3 = data.actor_3;
+    this.director = data.director;
+    this.distributor = data.distributor;
+    this.fun_facts = data.fun_facts;
+    this.locations = data.locations;
+    this.place_id = data.place_id;
+    this.production_company = data.production_company;
+    this.release_year = data.release_year;
     this.title = data.title;
+    this.writer = data.writer;
 
     this.lat = ko.observable(data.geometry.location.lat);
     this.lng = ko.observable(data.geometry.location.lng);
