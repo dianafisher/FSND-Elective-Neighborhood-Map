@@ -13,34 +13,15 @@
       <h1>San Francisco Film Locations</h1>
     </div>
     <div class="row">
-      <div class="col-md-3" id="titles" >
+      <div class="col-md-12" id="map"></div>
+    </div>
+    <!-- <div class="row"> -->
+      <div class="col-md-3" id="titles">
         <ul id="title-list" data-bind="foreach: titles">
           <li data-bind="text: title, click: $parent.titleClicked"></li>
         </ul>
       </div>
-      <div class="col-md-9" id="map"></div>
-    </div>
-
-    <!-- <ul id="cat-list" data-bind="foreach: cats">
-        <li data-bind="text: name, click: $parent.catClicked"></li>
-    </ul>
-    <div id="cat" data-bind="with: currentCat">
-
-        <h2 data-bind="text: name" id="cat-name"></h2>
-        <h3 data-bind="text: title"></h3>
-        <div data-bind="text: clickCount" id="cat-count"></div>
-
-        <img data-bind="click: $parent.incrementCounter, attr: {src: imgSrc}" id="cat-img" src="" alt="cute cat">
-
-        <ul data-bind="foreach: nicknames">
-            <li>
-                <span data-bind="text: $index"></span>:
-                <span data-bind="text: $data"></span>
-            </li>
-        </ul>
-    </div> -->
-
-
+    <!-- </div> -->
   </div>
   <script src="../bower_components/knockout/dist/knockout.js"></script>
   <script src="js/map.js"></script>

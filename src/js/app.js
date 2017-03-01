@@ -182,6 +182,7 @@ var Title = function(data) {
             if (entry.locations !== undefined) {
                 const address = entry.locations + " San Francisco, CA";
                 geocoder.geocode({ 'address': address }, function(results, status) {
+
                 if (status === google.maps.GeocoderStatus.OK) {
                     console.log(results[0].formatted_address);
 
@@ -190,6 +191,7 @@ var Title = function(data) {
                       map: map,
                       position: results[0].geometry.location
                     });
+
                     self.marker = ko.observable(marker);
 
                     google.maps.event.addListener(marker, 'click', function(){
@@ -212,43 +214,6 @@ var Title = function(data) {
             }
         });
     };
-
-    this.geocodeAddress = function() {
-        geocoder.geocode(
-            {'address': data.locations},
-            function(results, status){
-                if (status === 'OK') {
-                    console.log(data);
-                    console.log(results.length);
-                    results.forEach(result => {
-                        console.log(result.formatted_address);
-                    });
-                    console.log(results[0].geometry.location);
-                    console.log(results[0].formatted_address);
-                    var marker = new google.maps.Marker({
-                        map: map,
-                        position: results[0].geometry.location
-                    });
-                    self.marker = ko.observable(marker);
-                    google.maps.event.addListener(marker, 'click', function(){
-                        viewModel.markerClicked(self);
-                    });
-
-                    // Generate the content string
-                    var content =   '<div id="content">' +
-                                        '<div id="siteNotice">' + '</div>' +
-                                        '<h1 id="heading" class="heading">' + data.title  + '</h1>' +
-                                    '</div>';
-
-                    self.contentString = ko.observable(content);
-
-                } else {
-                    console.error('Geocode was not successful for the following reason: ' + status);
-                }
-
-            });
-    };
-
 
 };
 
@@ -278,15 +243,15 @@ var ViewModel = function() {
     };
 
     // handles a click on a map marker
-    this.markerClicked = function(location) {
-        console.log(location);
+    this.markerClicked = function(title) {
+        console.log(title);
 
-        var marker = location.marker();
+        var marker = title.marker();
         console.log(marker);
 
         // toggle the info window
         infowindow = new google.maps.InfoWindow({
-            content: location.contentString()
+            content: title.contentString()
         });
         infowindow.open(map, marker);
 
