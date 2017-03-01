@@ -29,7 +29,6 @@ const san_andreas = [
 
 // Endpoint for SF OpenData
 const endpoint = 'https://data.sfgov.org/resource/wwmu-gmzc.json';
-// const endpoint = 'https://data.sfgov.org/resource-wrong/wwmu-gmzc.json';
 
 var titles = [];
 var viewModel;
@@ -159,20 +158,60 @@ var Place = function(data) {
 
 };
 
-var Location = function(data) {
+var Title = function(data) {
     var self = this;
 
-    console.log('creating Location for', data);
-    this.actor_1 = data.actor_1;
-    this.actor_2 = data.actor_2;
-    this.actor_3 = data.actor_3;
-    this.director = data.director;
-    this.distributor = data.distributor;
-    this.locations = data.locations;
-    this.production_company = data.production_company;
-    this.release_year = data.release_year;
+    // console.log('creating Title for', data);
     this.title = data.title;
-    this.writer = data.writer;
+    this.entries = data.entries;
+
+    // this.actor_1 = data.actor_1;
+    // this.actor_2 = data.actor_2;
+    // this.actor_3 = data.actor_3;
+    // this.director = data.director;
+    // this.distributor = data.distributor;
+    // this.locations = data.locations;
+    // this.production_company = data.production_company;
+    // this.release_year = data.release_year;
+    // this.writer = data.writer;
+
+    this.showMarkers = function() {
+        // show marker for each entry in the entries array
+        this.entries.forEach(function(entry){
+            console.log(entry.locations);
+            if (entry.locations !== undefined) {
+                const address = entry.locations + " San Francisco, CA";
+                geocoder.geocode({ 'address': address }, function(results, status) {
+                if (status === google.maps.GeocoderStatus.OK) {
+                    console.log(results[0].formatted_address);
+
+                    map.setCenter(results[0].geometry.location);
+                    var marker = new google.maps.Marker({
+                      map: map,
+                      position: results[0].geometry.location
+                    });
+                    self.marker = ko.observable(marker);
+
+                    google.maps.event.addListener(marker, 'click', function(){
+                        viewModel.markerClicked(self);
+                    });
+
+                    // Generate the content string
+                    var content =   '<div id="content">' +
+                                        '<div id="siteNotice">' + '</div>' +
+                                        '<h1 id="heading" class="heading">' + entry.locations  + '</h1>' +
+                                    '</div>';
+
+                    self.contentString = ko.observable(content);
+                    } else {
+                        console.error('Geocode was not successful for the following reason: ' + status);
+                    }
+                });
+            } else {
+                alert('No location data for that title!');
+            }
+        });
+    };
 
     this.geocodeAddress = function() {
         geocoder.geocode(
@@ -217,13 +256,26 @@ var ViewModel = function() {
     // store the outer 'this' which represents the ViewModel
     var self = this;
 
-    this.locations = ko.observableArray([]);
+    this.titles = ko.observableArray([]);
     console.log(titles);
 
-    // Create a new Location object for each item in the array.
-    titles.forEach(function(location){
-        self.locations.push( new Location(location) );
+    // Create a new Title object for each item in the titles array.
+    titles.forEach(function(title){
+        self.titles.push( new Title(title) );
     });
+
+    // set the current title
+    this.currentTitle = ko.observable( this.titles()[0] );
+
+    this.titleClicked = function() {
+        console.log('ViewModel: title clicked!');
+
+        console.log(this);
+
+        // update the current title
+        self.currentTitle(this);
+        this.showMarkers();
+    };
 
     // handles a click on a map marker
     this.markerClicked = function(location) {

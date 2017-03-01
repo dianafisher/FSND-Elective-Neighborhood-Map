@@ -1,0 +1,11 @@
+#title-list {
+    max-height: 500px;
+    overflow: scroll;
+}
+#titles {
+    z-index: 10000;
+}
+
+#map {
+    height: 100vh;
+}

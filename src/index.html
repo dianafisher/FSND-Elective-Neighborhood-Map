@@ -5,21 +5,7 @@
     <title>SF Film Locations</title>
 
     <link rel="stylesheet"  href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
-
-    <style>
-      /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
-      #map {
-        height: 100%;
-      }
-      /* Optional: Makes the sample page fill the window. */
-      html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-    </style>
-
+    <link rel="stylesheet"  href="css/main.css">
 </head>
 <body>
   <div class="container">
@@ -27,11 +13,14 @@
       <h1>San Francisco Film Locations</h1>
     </div>
     <div class="row">
-      <ul id="location-list" data-bind="foreach: locations">
-        <li data-bind="text: title"></li>
-      </ul>
-      <div id="map"></div>
+      <div class="col-md-3" id="titles" >
+        <ul id="title-list" data-bind="foreach: titles">
+          <li data-bind="text: title, click: $parent.titleClicked"></li>
+        </ul>
+      </div>
+      <div class="col-md-9" id="map"></div>
     </div>
+
     <!-- <ul id="cat-list" data-bind="foreach: cats">
         <li data-bind="text: name, click: $parent.catClicked"></li>
     </ul>
