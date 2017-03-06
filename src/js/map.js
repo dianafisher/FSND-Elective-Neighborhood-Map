@@ -5,11 +5,12 @@ var styles = [{"featureType":"landscape.man_made","elementType":"geometry.fill",
 
 function initMap() {
 //@37.7494945,-122.2824239
+
   var center = new google.maps.LatLng(37.7494945,-122.2824239);
 
   // Intialize our map
   var mapOptions = {
-    zoom: 12,
+    zoom: 13,
     center: center,
     styles: styles
   };
