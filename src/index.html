@@ -12,16 +12,34 @@
     <div class="page-header">
       <h1>San Francisco Film Locations</h1>
     </div>
-    <div class="row">
+
+    <div class="row" id="search">
+      <div class="col-md-12">
+        <input class="form-control" placeholder="Search for a film" data-bind="textInput: filmSearch">
+      </div>
+    </div>
+
+    <section class="row">
+      <div class="col-md-3" id="titles">
+          <ul class="list-group" id="title-list" data-bind="foreach: locations">
+            <li class="list-group-item" data-bind="text: title, click: $parent.locationClicked"></li>
+          </ul>
+
+      </div>
+      <div class="col-md-9" id="map"></div>
+    </section>
+
+    <!-- <div class="row">
       <div class="col-md-12" id="map"></div>
     </div>
-    <!-- <div class="row"> -->
+
+    <div class="row">
       <div class="col-md-3" id="titles">
-        <ul id="title-list" data-bind="foreach: locations">
-          <li data-bind="text: title, click: $parent.locationClicked"></li>
+        <ul class="list-group" id="title-list" data-bind="foreach: locations">
+          <li class="list-group-item" data-bind="text: title, click: $parent.locationClicked"></li>
         </ul>
       </div>
-    <!-- </div> -->
+    </div> -->
   </div>
 
   <!-- Knockout -->

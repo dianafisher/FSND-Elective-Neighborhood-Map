@@ -1,20 +1,25 @@
+
 #title-list {
     max-height: 692px;
     overflow: scroll;
 }
 #titles {
-    z-index: 10000;
-    position: absolute;
-    top: 119px;
+    /*z-index: 10000;*/
+    /*position: absolute;*/
+    /*top: 119px;*/
     background: white;
 }
 
 #map {
     /*height: 100vh;*/
     height: 700px;
-    width: 100%;
+    /*width: 100%;*/
 }
 
 .poster_image {
     height: 400px;
+}
+
+section {
+    margin-top: 20px;
 }

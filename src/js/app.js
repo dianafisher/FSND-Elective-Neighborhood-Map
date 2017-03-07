@@ -94,6 +94,12 @@ var Location = function(data) {
             console.log(imgTag);
             content += imgTag;
 
+            var release_date = data.results[0].release_date;
+            var overview = data.results[0].overview;
+
+            var dateTag = '<span class="release_date">Released: ' + release_date + '</span>';
+            // content += dateTag;
+
             self.contentString = ko.observable(content);
         });
 
@@ -108,7 +114,9 @@ var ViewModel = function() {
     this.locations = ko.observableArray([]);
     console.log(locations);
 
-    // Create a new Title object for each item in the titles array.
+    this.filmSearch = ko.observable('');
+
+    // Create a new Location object for each item in the locations array.
     locations.forEach(function(loc){
         self.locations.push( new Location(loc) );
     });
