@@ -21,7 +21,7 @@
 
     <section class="row">
       <div class="col-md-3" id="titles">
-          <ul class="list-group" id="title-list" data-bind="foreach: locations">
+          <ul class="list-group" id="title-list" data-bind="foreach: filteredList">
             <li class="list-group-item" data-bind="text: title, click: $parent.locationClicked"></li>
           </ul>
 
@@ -45,7 +45,7 @@
   <!-- Knockout -->
   <script src="../bower_components/knockout/dist/knockout.js"></script>
 
-  <script src="js/map.js"></script>
+  <!-- Application -->
   <script src="js/app.js"></script>
 
   <!-- Google Maps -->

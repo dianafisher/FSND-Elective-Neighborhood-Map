@@ -5,6 +5,9 @@ const locations = [{"actor_1":"Candice Bergen","actor_2":"Giancarlo Gianni","dir
 // Endpoint for SF OpenData
 // const endpoint = 'https://data.sfgov.org/resource/wwmu-gmzc.json';
 
+// var styles_1 = [{"featureType":"water","stylers":[{"color":"#19a0d8"}]},{"featureType":"administrative","elementType":"labels.text.stroke","stylers":[{"color":"#ffffff"},{"weight":6}]},{"featureType":"administrative","elementType":"labels.text.fill","stylers":[{"color":"#e85113"}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#efe9e4"},{"lightness":-40}]},{"featureType":"road.arterial","elementType":"geometry.stroke","stylers":[{"color":"#efe9e4"},{"lightness":-20}]},{"featureType":"road","elementType":"labels.text.stroke","stylers":[{"lightness":100}]},{"featureType":"road","elementType":"labels.text.fill","stylers":[{"lightness":-100}]},{"featureType":"road.highway","elementType":"labels.icon"},{"featureType":"landscape","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"landscape","stylers":[{"lightness":20},{"color":"#efe9e4"}]},{"featureType":"landscape.man_made","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"labels.text.stroke","stylers":[{"lightness":100}]},{"featureType":"water","elementType":"labels.text.fill","stylers":[{"lightness":-100}]},{"featureType":"poi","elementType":"labels.text.fill","stylers":[{"hue":"#11ff00"}]},{"featureType":"poi","elementType":"labels.text.stroke","stylers":[{"lightness":100}]},{"featureType":"poi","elementType":"labels.icon","stylers":[{"hue":"#4cff00"},{"saturation":58}]},{"featureType":"poi","elementType":"geometry","stylers":[{"visibility":"on"},{"color":"#f0e4d3"}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#efe9e4"},{"lightness":-25}]},{"featureType":"road.arterial","elementType":"geometry.fill","stylers":[{"color":"#efe9e4"},{"lightness":-10}]},{"featureType":"poi","elementType":"labels","stylers":[{"visibility":"simplified"}]}];
+var styles = [{"featureType":"landscape.man_made","elementType":"geometry.fill","stylers":[{"color":"#e9e5dc"}]},{"featureType":"landscape.natural","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"color":"#b8cb93"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"poi.business","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"poi.medical","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.park","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.park","elementType":"geometry.fill","stylers":[{"color":"#ccdca1"}]},{"featureType":"poi.sports_complex","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"road","elementType":"geometry.fill","stylers":[{"hue":"#ff0000"},{"saturation":-100},{"lightness":99}]},{"featureType":"road","elementType":"geometry.stroke","stylers":[{"color":"#808080"},{"lightness":54},{"visibility":"off"}]},{"featureType":"road","elementType":"labels.text.fill","stylers":[{"color":"#767676"}]},{"featureType":"road","elementType":"labels.text.stroke","stylers":[{"color":"#ffffff"}]},{"featureType":"water","elementType":"all","stylers":[{"saturation":43},{"lightness":-11},{"color":"#89cada"}]}];
+
 
 // //http://api.themoviedb.org/3/search/movie?api_key=APIKEY&query=MOVIENAME
 // get('https://api.themoviedb.org/3/search/movie?api_key=9c8b8a24a248fed2e25eb1f8d2f29d13&language=en-US&query=180&page=1&include_adult=false&year=2011').then(function(response) {
@@ -27,6 +30,31 @@ var icons = {
     icon: 'img/movie.png'
   }
 };
+
+var map;
+
+
+function initMap() {
+
+  var center = new google.maps.LatLng(37.7494945,-122.2824239);
+
+  // Intialize our map
+  var mapOptions = {
+    zoom: 13,
+    center: center,
+    styles: styles
+  };
+
+  map = new google.maps.Map(document.getElementById("map"), mapOptions);
+  google.maps.event.addDomListener(window, 'load', mapLoaded);
+
+}
+
+function mapLoaded(){
+    console.log('map loaded!');
+    viewModel = new ViewModel();
+    ko.applyBindings(viewModel);
+}
 
 var Location = function(data) {
     var self = this;
@@ -54,7 +82,7 @@ var Location = function(data) {
     var marker = new google.maps.Marker({
         position: coords,
         map: map,
-        icon: image,
+        icon: image
     });
     this.marker = ko.observable(marker);
     google.maps.event.addListener(marker, 'click', function(){
@@ -71,7 +99,7 @@ var Location = function(data) {
 
     this.contentString = ko.observable(content);
 
-    this.movieData = function() {
+    this.loadMovieData = function() {
         var url = 'https://api.themoviedb.org/3/search/movie?api_key=9c8b8a24a248fed2e25eb1f8d2f29d13&language=en-US&query=' +
                     this.title + '&page=1&include_adult=false&year=' +
                     this.release_year;
@@ -97,6 +125,9 @@ var Location = function(data) {
             var release_date = data.results[0].release_date;
             var overview = data.results[0].overview;
 
+            var overviewTag = '<span class="overview">' + overview + '</span>';
+            content += overviewTag;
+
             var dateTag = '<span class="release_date">Released: ' + release_date + '</span>';
             // content += dateTag;
 
@@ -108,11 +139,13 @@ var Location = function(data) {
 };
 
 var ViewModel = function() {
-    // store the outer 'this' which represents the ViewModel
+    // store the outer 'this' parameter which represents the ViewModel
     var self = this;
 
     this.locations = ko.observableArray([]);
     console.log(locations);
+
+    this.filteredList = ko.observableArray([]);
 
     this.filmSearch = ko.observable('');
 
@@ -121,9 +154,10 @@ var ViewModel = function() {
         self.locations.push( new Location(loc) );
     });
 
-    // set the current title
+    // set the current location
     this.currentLocation = ko.observable( this.locations()[0] );
 
+    // handles a click on a list item
     this.locationClicked = function(location) {
         console.log('ViewModel: location clicked!');
 
@@ -132,7 +166,7 @@ var ViewModel = function() {
         // clear any marker that is currently bouncing.
         self.currentLocation().marker().setAnimation(null);
 
-        // update the current title
+        // update the current location
         self.currentLocation(this);
 
         // make the selected location marker bounce
@@ -141,19 +175,21 @@ var ViewModel = function() {
         // center the map on the marker location
         location.marker().map.setCenter(location.marker().position);
 
-        location.movieData();
+        location.loadMovieData();
     };
 
     // handles a click on a map marker
-    this.markerClicked = function(title) {
-        console.log(title);
+    this.markerClicked = function(location) {
+        console.log(location);
 
-        var marker = title.marker();
+        var marker = location.marker();
         console.log(marker);
+
+        location.loadMovieData();  // TODO: show info window once this call has completed.
 
         // toggle the info window
         infowindow = new google.maps.InfoWindow({
-            content: title.contentString()
+            content: location.contentString()
         });
         infowindow.open(map, marker);
 
@@ -164,36 +200,60 @@ var ViewModel = function() {
             marker.setAnimation(google.maps.Animation.BOUNCE);
         }
     };
+
+    // uses a regular expression to match by location title
+    this.findMatches = function(wordToMatch) {
+        return  this.locations().filter(location => {
+            const regex = new RegExp(wordToMatch, 'gi');  // global, insensitive
+            return location.title.match(regex);
+        });
+    };
+
+    // filter the location list by film title.
+    this.filteredResult = ko.computed(function(){
+        console.log(self.filteredList);
+        console.log(self.filteredList().length);
+        self.filteredList.removeAll();
+        // get the search term from the input box
+        var searchTerm = self.filmSearch().toLowerCase();
+        console.log(searchTerm);
+        // get matching locations
+        // self.filteredList = self.findMatches(searchTerm);
+        results = self.findMatches(searchTerm);
+        console.log(results);
+        results.forEach(result => {
+            self.filteredList.push(result);
+        });
+
+    }, this);
 };
 
 
 function get(url) {
-  // Return a new promise.
+  // returns a new promise.
   return new Promise(function(resolve, reject) {
-    // Do the usual XHR stuff
-    var req = new XMLHttpRequest();
-    req.open('GET', url);
 
-    req.onload = function() {
-      // This is called even on 404 etc
-      // so check the status
-      if (req.status === 200) {
-        // Resolve the promise with the response text
-        resolve(req.response);
+    var request = new XMLHttpRequest();
+    request.open('GET', url);
+
+    request.onload = function() {
+      // check the status
+      if (request.status === 200) {
+        // resolve the promise with the response text
+        resolve(request.response);
       }
       else {
-        // Otherwise reject with the status text
-        // which will hopefully be a meaningful error
-        reject(Error(req.statusText));
+        // otherwise reject with the status text
+        reject(Error(request.statusText));
       }
     };
 
-    // Handle network errors
-    req.onerror = function() {
+    // handle network errors
+    request.onerror = function() {
       reject(Error("Network Error"));
     };
 
     // Make the request
-    req.send();
+    request.send();
   });
 }
