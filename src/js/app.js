@@ -50,6 +50,11 @@ function initMap() {
 
 }
 
+function googleError() {
+    console.error('Failed to load Google Map');
+    alert('Failed to load Google Map');
+}
+
 function mapLoaded(){
     console.log('map loaded!');
     viewModel = new ViewModel();
@@ -112,6 +117,36 @@ var Location = function(data) {
         this.marker().setMap(map);
     };
 
+    this.contentFromData = function(data) {
+        console.log(data);
+        const results = data.results[0];
+        if (results !== undefined) {
+            const poster = results.poster_path;
+            console.log(poster);
+            var poster_url = 'https://image.tmdb.org/t/p/original/' + poster;
+            console.log(poster_url);
+            var content = self.contentString();
+            console.log(content);
+            // Add the poster image to the content string.
+            var imgTag = '<img class="poster_image" src="' + poster_url + '">';
+            console.log(imgTag);
+            content += imgTag;
+
+            var release_date = results.release_date;
+            var overview = results.overview;
+
+            var overviewTag = '<span class="overview">' + overview + '</span>';
+            content += overviewTag;
+
+            var dateTag = '<span class="release_date">Released: ' + release_date + '</span>';
+            // content += dateTag;
+            self.contentString = ko.observable(content);
+
+        } else {
+            console.log('no results for selected item.');
+        }
+    };
+
     this.loadMovieData = function() {
         var url = 'https://api.themoviedb.org/3/search/movie?api_key=9c8b8a24a248fed2e25eb1f8d2f29d13&language=en-US&query=' +
                     this.title + '&page=1&include_adult=false&year=' +
@@ -143,12 +178,38 @@ var Location = function(data) {
 
             var dateTag = '<span class="release_date">Released: ' + release_date + '</span>';
             // content += dateTag;
-
             self.contentString = ko.observable(content);
-        });
 
+        });
     };
 
+    this.loadData = function() {
+        var url = 'https://api.themoviedb.org/3/search/movie?api_key=9c8b8a24a248fed2e25eb1f8d2f29d13&language=en-US&query=' +
+                    this.title + '&page=1&include_adult=false&year=' +
+                    this.release_year;
+
+        return new Promise(function(resolve, reject) {
+            var request = new XMLHttpRequest();
+            request.open('GET', url);
+            request.onload = function() {
+                if (request.status === 200) {
+                    // resolve the promise by passing back the response
+                    resolve(request.response);
+                } else {
+                    // upon failure, reject the promise with an error message
+                    reject(Error('Failed to load successfully; error code:' + request.statusText));
+                }
+            };
+
+            // handles the case where the entire request fails.
+            request.onerror = function() {
+                reject(Error('Network error.'));
+            };
+
+            // send the request
+            request.send();
+        });
+    };
 };
 
 var ViewModel = function() {
@@ -198,13 +259,28 @@ var ViewModel = function() {
         var marker = location.marker();
         console.log(marker);
 
-        location.loadMovieData();  // TODO: show info window once this call has completed.
+        // location.loadMovieData();  // TODO: show info window once this call has completed.
+        location.loadData().then(function(response){
+            console.log('Success!', response);
+            var data = JSON.parse(response);
+            console.log(data);
+            location.contentFromData(data);
 
-        // toggle the info window
-        infowindow = new google.maps.InfoWindow({
-            content: location.contentString()
+            // set the content on the info window
+            infowindow = new google.maps.InfoWindow({
+                content: location.contentString()
+            });
+            infowindow.open(map, marker);
+
+        }, function(Error) {
+            console.log(Error);
         });
-        infowindow.open(map, marker);
+
+        // // toggle the info window
+        // infowindow = new google.maps.InfoWindow({
+        //     content: location.contentString()
+        // });
+        // infowindow.open(map, marker);
 
         // toggle the bounce animation
         if (marker.getAnimation() !== null) {
