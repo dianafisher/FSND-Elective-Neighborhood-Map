@@ -1,11 +1,11 @@
 #title-list {
-    max-height: 500px;
+    max-height: 692px;
     overflow: scroll;
 }
 #titles {
     z-index: 10000;
     position: absolute;
-    top: 212px;
+    top: 119px;
     background: white;
 }
 
