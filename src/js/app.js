@@ -82,8 +82,11 @@ var Location = function(data) {
     var marker = new google.maps.Marker({
         position: coords,
         map: map,
-        icon: image
+        icon: image,
+        title: self.title // shows up as a tooltip
     });
+
+    // create a ko observable for the map marker
     this.marker = ko.observable(marker);
     google.maps.event.addListener(marker, 'click', function(){
         viewModel.markerClicked(self);
@@ -98,6 +101,16 @@ var Location = function(data) {
     // var content = data.name;
 
     this.contentString = ko.observable(content);
+
+    // hides the map marker by setting it's map paramter to null
+    this.hideMarker = function() {
+        this.marker().setMap(null);
+    };
+
+    // shows the map marker
+    this.showMarker = function() {
+        this.marker().setMap(map);
+    };
 
     this.loadMovieData = function() {
         var url = 'https://api.themoviedb.org/3/search/movie?api_key=9c8b8a24a248fed2e25eb1f8d2f29d13&language=en-US&query=' +
@@ -211,17 +224,27 @@ var ViewModel = function() {
 
     // filter the location list by film title.
     this.filteredResult = ko.computed(function(){
-        console.log(self.filteredList);
-        console.log(self.filteredList().length);
+
+        // hide all map markers
+        self.filteredList().forEach(location => {
+            location.hideMarker();
+        });
+
+        // remove all items from our filtered list
         self.filteredList.removeAll();
+
         // get the search term from the input box
         var searchTerm = self.filmSearch().toLowerCase();
-        console.log(searchTerm);
+
         // get matching locations
-        // self.filteredList = self.findMatches(searchTerm);
         results = self.findMatches(searchTerm);
-        console.log(results);
+        // console.log(results);
+
+        // the resulting list will not be a ko list, so we need to add all of the results to our filtered list.
         results.forEach(result => {
+            // show the map marker for this result
+            result.showMarker();
+            // add the result to our filtered list.
             self.filteredList.push(result);
         });
 
