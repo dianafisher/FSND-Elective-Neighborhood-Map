@@ -97,16 +97,6 @@ var Location = function(data) {
         viewModel.markerClicked(self);
     });
 
-    var content = '<div id="content">' +
-            '<div id="siteNotice">' + '</div>' +
-            '<h1 id="heading" class="heading">' + data.title + '</h1>' +
-            '<span>' + data.locations + '</span>' +
-            '</div>';
-
-    // var content = data.name;
-
-    this.contentString = ko.observable(content);
-
     // hides the map marker by setting it's map paramter to null
     this.hideMarker = function() {
         this.marker().setMap(null);
@@ -117,69 +107,60 @@ var Location = function(data) {
         this.marker().setMap(map);
     };
 
-    this.contentFromData = function(data) {
-        console.log(data);
-        const results = data.results[0];
-        if (results !== undefined) {
-            const poster = results.poster_path;
-            console.log(poster);
-            var poster_url = 'https://image.tmdb.org/t/p/original/' + poster;
-            console.log(poster_url);
-            var content = self.contentString();
-            console.log(content);
-            // Add the poster image to the content string.
-            var imgTag = '<img class="poster_image" src="' + poster_url + '">';
-            console.log(imgTag);
-            content += imgTag;
-
-            var release_date = results.release_date;
-            var overview = results.overview;
-
-            var overviewTag = '<span class="overview">' + overview + '</span>';
-            content += overviewTag;
-
-            var dateTag = '<span class="release_date">Released: ' + release_date + '</span>';
-            // content += dateTag;
-            self.contentString = ko.observable(content);
-
-        } else {
-            console.log('no results for selected item.');
-        }
-    };
-
-    this.loadMovieData = function() {
-        var url = 'https://api.themoviedb.org/3/search/movie?api_key=9c8b8a24a248fed2e25eb1f8d2f29d13&language=en-US&query=' +
-                    this.title + '&page=1&include_adult=false&year=' +
-                    this.release_year;
-
-        console.log(url);
-        get(url).then(function(response){
+    this.createInfoContent = function() {
+        self.loadData().then(function(response){
             console.log('Success!', response);
-
             var data = JSON.parse(response);
             console.log(data);
-            var poster = data.results[0].poster_path;
-            console.log(poster);
-            var poster_url = 'https://image.tmdb.org/t/p/original/' + poster;
-            console.log(poster_url);
 
-            var content = self.contentString();
-            console.log(content);
-            // Add the poster image to the content string.
-            var imgTag = '<img class="poster_image" src="' + poster_url + '">';
-            console.log(imgTag);
-            content += imgTag;
+            // build the content string from the data
+            var content =
+                    '<div class="panel panel-info" id="content">' +
+                        '<div class="panel-heading">' +
+                            '<h3 class="panel-title">' +  self.title + '</h3>' +
+                        '</div>' +
+                        '<div class="panel-body">' +
+                            '<p> <strong>Address: </strong>' + self.address() + '</p>' +
+                            ((self.fun_facts === undefined) ? '<p></p>' : '<p>' + self.fun_facts) + '</p>' +
+                            '<p> <strong>Released: </strong>' + self.release_year + '</p>' +
+                            '<p> <strong>Production Company: </strong>' + self.production_company + '</p>' +
+                            '<div id="siteNotice"></div>' +
+                        '</div>' +
+                    '</div>';
 
-            var release_date = data.results[0].release_date;
-            var overview = data.results[0].overview;
+            const results = data.results[0];
+            if (results !== undefined) {
+                const poster = results.poster_path;
+                console.log(poster);
+                const poster_url = 'https://image.tmdb.org/t/p/original/' + poster;
+                console.log(poster_url);
 
-            var overviewTag = '<span class="overview">' + overview + '</span>';
-            content += overviewTag;
+                const release_date = results.release_date;
+                const overview = results.overview;
 
-            var dateTag = '<span class="release_date">Released: ' + release_date + '</span>';
-            // content += dateTag;
-            self.contentString = ko.observable(content);
+                // build the content string from the data
+                content =
+                '<div id="content">' +
+                    '<div id="siteNotice"></div>' +
+                    '<h1 id="heading" class="heading">' + self.title + '</h1>' +
+                    '<span>' + self.locations + '</span>' +
+                    '<img class="poster_image" src="' + poster_url + '">' +
+                    '<span class="overview">' + overview + '</span>' +
+                    '<span class="release_date">Released: ' + release_date + '</span>' +
+                '</div>';
 
+            } else {
+                console.log('no results for selected item.');
+            }
+
+            // set the content on the info window
+            infowindow = new google.maps.InfoWindow({
+                content: content
+            });
+            infowindow.open(map, marker);
+
+        }, function(Error) {
+            console.log(Error);
         });
     };
 
@@ -249,7 +230,7 @@ var ViewModel = function() {
         // center the map on the marker location
         location.marker().map.setCenter(location.marker().position);
 
-        location.loadMovieData();
+        location.createInfoContent();
     };
 
     // handles a click on a map marker
@@ -259,33 +240,13 @@ var ViewModel = function() {
         var marker = location.marker();
         console.log(marker);
 
-        // location.loadMovieData();  // TODO: show info window once this call has completed.
-        location.loadData().then(function(response){
-            console.log('Success!', response);
-            var data = JSON.parse(response);
-            console.log(data);
-            location.contentFromData(data);
-
-            // set the content on the info window
-            infowindow = new google.maps.InfoWindow({
-                content: location.contentString()
-            });
-            infowindow.open(map, marker);
-
-        }, function(Error) {
-            console.log(Error);
-        });
-
-        // // toggle the info window
-        // infowindow = new google.maps.InfoWindow({
-        //     content: location.contentString()
-        // });
-        // infowindow.open(map, marker);
+        location.createInfoContent();
 
         // toggle the bounce animation
         if (marker.getAnimation() !== null) {
             marker.setAnimation(null);
         } else {
+            console.log('bouncy marker');
             marker.setAnimation(google.maps.Animation.BOUNCE);
         }
     };
