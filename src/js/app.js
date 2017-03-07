@@ -87,6 +87,14 @@ var Location = function(data) {
             var poster_url = 'https://image.tmdb.org/t/p/original/' + poster;
             console.log(poster_url);
 
+            var content = self.contentString();
+            console.log(content);
+            // Add the poster image to the content string.
+            var imgTag = '<img class="poster_image" src="' + poster_url + '">';
+            console.log(imgTag);
+            content += imgTag;
+
+            self.contentString = ko.observable(content);
         });
 
     };
