@@ -114,75 +114,55 @@ var Location = function(data) {
             console.log(data);
 
             // build the content string from the data
-            var content =
-                    '<div class="panel panel-info" id="content">' +
-                        '<div class="panel-heading">' +
-                            '<h3 class="panel-title">' +  self.title + '</h3>' +
-                        '</div>' +
-                        '<div class="panel-body">' +
-                            '<p> <strong>Location: </strong>' + self.locations + '</p>' +
-                            '<p> <strong>Address: </strong>' + self.address() + '</p>' +
-                            ((self.fun_facts === undefined) ? '<p></p>' : '<p> <strong>Fun Facts: </strong>' + self.fun_facts) + '</p>' +
-                            '<p> <strong>Released: </strong>' + self.release_year + '</p>' +
-                            '<p> <strong>Production Company: </strong>' + self.production_company + '</p>' +
-                            ((self.director === undefined) ? '' : '<p> <strong>Directed by: </strong>' + self.director + '</p>') +
-                            '<p> <strong>Starring:</strong>' +
-                                        '<ul class="actor-list">' +
-                                            '<li>' + self.actor_1 + '</li>' +
-                                            ((self.actor_2 === undefined) ? '' : '<li>' + self.actor_2 + '</li>') +
-                                            ((self.actor_3 === undefined) ? '' : '<li>' + self.actor_3 + '</li>') +
-                                        '</ul>' +
-                                    '</p>' +
-                            '<div id="siteNotice"></div>' +
-                        '</div>' +
-                    '</div>';
+            var poster_url = '/img/no-poster-available.jpg';
+            var release_date = (self.release_year === undefined) ? '' : self.release_year;
+            var overview = '';
 
             const results = data.results[0];
             if (results !== undefined) {
                 const poster = results.poster_path;
                 console.log(poster);
-                const poster_url = 'https://image.tmdb.org/t/p/original/' + poster;
+                poster_url = 'https://image.tmdb.org/t/p/original/' + poster;
                 console.log(poster_url);
 
-                const release_date = results.release_date;
-                const overview = results.overview;
-
-                // build the content string from the data
-                content =
-                    '<div class="panel panel-info" id="content">' +
-                        '<div class="panel-heading">' +
-                            '<h3 class="panel-title">' +  self.title + '</h3>' +
-                        '</div>' +
-                        '<div class="panel-body">' +
-                            '<div class="media">' +
-                                '<div class="media-left">' +
-                                    '<img class="media-object poster_image" src="' + poster_url + '" alt="movie poster art">' +
-                                '</div>' +
-                                '<div class="media-body">' +
-                                    '<p> <strong>Location: </strong>' + self.locations + '</p>' +
-                                    '<p> <strong>Address: </strong>' + self.address() + '</p>' +
-                                    ((self.fun_facts === undefined) ? '<p></p>' : '<p> <strong>Fun Facts: </strong>' + self.fun_facts) + '</p>' +
-                                    '<p> <strong>Released: </strong>' + release_date + '</p>' +
-                                    '<p> <strong>Production Company: </strong>' + self.production_company + '</p>' +
-                                    ((self.director === undefined) ? '' : '<p> <strong>Directed by: </strong>' + self.director + '</p>') +
-                                    '<p> <strong>Starring:</strong>' +
-                                        '<ul class="actor-list">' +
-                                            '<li>' + self.actor_1 + '</li>' +
-                                            ((self.actor_2 === undefined) ? '' : '<li>' + self.actor_2 + '</li>') +
-                                            ((self.actor_3 === undefined) ? '' : '<li>' + self.actor_3 + '</li>') +
-                                        '</ul>' +
-                                    '</p>' +
-                                    '<p> <strong>Overview: </strong>' + overview + '</p>' +
-                                '</div' +
-                            '</div>' +
-
-                            '<div id="siteNotice"></div>' +
-                        '</div>' +
-                    '</div>';
-
+                release_date = results.release_date;
+                overview = results.overview;
             } else {
                 console.log('no results for selected item.');
             }
+
+             // build the content string from the data
+            content =
+                '<div class="panel panel-info" id="content">' +
+                    '<div class="panel-heading">' +
+                        '<h3 class="panel-title">' +  self.title + '</h3>' +
+                    '</div>' +
+                    '<div class="panel-body">' +
+                        '<div class="media">' +
+                            '<div class="media-left">' +
+                                '<img class="media-object poster_image" src="' + poster_url + '" alt="movie poster art">' +
+                            '</div>' +
+                            '<div class="media-body">' +
+                                '<p> <strong>Location: </strong>' + self.locations + '</p>' +
+                                '<p> <strong>Address: </strong>' + self.address() + '</p>' +
+                                ((self.fun_facts === undefined) ? '<p></p>' : '<p> <strong>Fun Facts: </strong>' + self.fun_facts) + '</p>' +
+                                '<p> <strong>Released: </strong>' + release_date + '</p>' +
+                                '<p> <strong>Production Company: </strong>' + self.production_company + '</p>' +
+                                ((self.director === undefined) ? '' : '<p> <strong>Directed by: </strong>' + self.director + '</p>') +
+                                '<p> <strong>Starring:</strong>' +
+                                    '<ul class="actor-list">' +
+                                        ((self.actor_1 === undefined) ? '' : '<li>' + self.actor_1 + '</li>') +
+                                        ((self.actor_2 === undefined) ? '' : '<li>' + self.actor_2 + '</li>') +
+                                        ((self.actor_3 === undefined) ? '' : '<li>' + self.actor_3 + '</li>') +
+                                    '</ul>' +
+                                '</p>' +
+                                '<p> <strong>Overview: </strong>' + overview + '</p>' +
+                            '</div' +
+                        '</div>' +
+
+                        '<div id="siteNotice"></div>' +
+                    '</div>' +
+                '</div>';
 
             // set the content on the info window
             infowindow = new google.maps.InfoWindow({
@@ -229,7 +209,6 @@ var ViewModel = function() {
     var self = this;
 
     this.locations = ko.observableArray([]);
-    console.log(locations);
 
     this.filteredList = ko.observableArray([]);
 
@@ -320,31 +299,3 @@ var ViewModel = function() {
 };
 
 
-function get(url) {
-  // returns a new promise.
-  return new Promise(function(resolve, reject) {
-
-    var request = new XMLHttpRequest();
-    request.open('GET', url);
-
-    request.onload = function() {
-      // check the status
-      if (request.status === 200) {
-        // resolve the promise with the response text
-        resolve(request.response);
-      }
-      else {
-        // otherwise reject with the status text
-        reject(Error(request.statusText));
-      }
-    };
-
-    // handle network errors
-    request.onerror = function() {
-      reject(Error("Network Error"));
-    };
-
-    // Make the request
-    request.send();
-  });
-}
