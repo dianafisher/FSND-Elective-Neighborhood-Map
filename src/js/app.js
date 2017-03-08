@@ -120,10 +120,19 @@ var Location = function(data) {
                             '<h3 class="panel-title">' +  self.title + '</h3>' +
                         '</div>' +
                         '<div class="panel-body">' +
+                            '<p> <strong>Location: </strong>' + self.locations + '</p>' +
                             '<p> <strong>Address: </strong>' + self.address() + '</p>' +
-                            ((self.fun_facts === undefined) ? '<p></p>' : '<p>' + self.fun_facts) + '</p>' +
+                            ((self.fun_facts === undefined) ? '<p></p>' : '<p> <strong>Fun Facts: </strong>' + self.fun_facts) + '</p>' +
                             '<p> <strong>Released: </strong>' + self.release_year + '</p>' +
                             '<p> <strong>Production Company: </strong>' + self.production_company + '</p>' +
+                            ((self.director === undefined) ? '' : '<p> <strong>Directed by: </strong>' + self.director + '</p>') +
+                            '<p> <strong>Starring:</strong>' +
+                                        '<ul class="actor-list">' +
+                                            '<li>' + self.actor_1 + '</li>' +
+                                            ((self.actor_2 === undefined) ? '' : '<li>' + self.actor_2 + '</li>') +
+                                            ((self.actor_3 === undefined) ? '' : '<li>' + self.actor_3 + '</li>') +
+                                        '</ul>' +
+                                    '</p>' +
                             '<div id="siteNotice"></div>' +
                         '</div>' +
                     '</div>';
@@ -140,14 +149,36 @@ var Location = function(data) {
 
                 // build the content string from the data
                 content =
-                '<div id="content">' +
-                    '<div id="siteNotice"></div>' +
-                    '<h1 id="heading" class="heading">' + self.title + '</h1>' +
-                    '<span>' + self.locations + '</span>' +
-                    '<img class="poster_image" src="' + poster_url + '">' +
-                    '<span class="overview">' + overview + '</span>' +
-                    '<span class="release_date">Released: ' + release_date + '</span>' +
-                '</div>';
+                    '<div class="panel panel-info" id="content">' +
+                        '<div class="panel-heading">' +
+                            '<h3 class="panel-title">' +  self.title + '</h3>' +
+                        '</div>' +
+                        '<div class="panel-body">' +
+                            '<div class="media">' +
+                                '<div class="media-left">' +
+                                    '<img class="media-object poster_image" src="' + poster_url + '" alt="movie poster art">' +
+                                '</div>' +
+                                '<div class="media-body">' +
+                                    '<p> <strong>Location: </strong>' + self.locations + '</p>' +
+                                    '<p> <strong>Address: </strong>' + self.address() + '</p>' +
+                                    ((self.fun_facts === undefined) ? '<p></p>' : '<p> <strong>Fun Facts: </strong>' + self.fun_facts) + '</p>' +
+                                    '<p> <strong>Released: </strong>' + release_date + '</p>' +
+                                    '<p> <strong>Production Company: </strong>' + self.production_company + '</p>' +
+                                    ((self.director === undefined) ? '' : '<p> <strong>Directed by: </strong>' + self.director + '</p>') +
+                                    '<p> <strong>Starring:</strong>' +
+                                        '<ul class="actor-list">' +
+                                            '<li>' + self.actor_1 + '</li>' +
+                                            ((self.actor_2 === undefined) ? '' : '<li>' + self.actor_2 + '</li>') +
+                                            ((self.actor_3 === undefined) ? '' : '<li>' + self.actor_3 + '</li>') +
+                                        '</ul>' +
+                                    '</p>' +
+                                    '<p> <strong>Overview: </strong>' + overview + '</p>' +
+                                '</div' +
+                            '</div>' +
+
+                            '<div id="siteNotice"></div>' +
+                        '</div>' +
+                    '</div>';
 
             } else {
                 console.log('no results for selected item.');
