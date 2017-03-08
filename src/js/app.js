@@ -22,11 +22,13 @@ function initMap() {
 
 }
 
+// handles any errors in loading the map
 function googleError() {
     console.error('Failed to load Google Map');
     alert('Failed to load Google Map');
 }
 
+// called when google maps has loaded
 function mapLoaded(){
     console.log('map loaded!');
     viewModel = new ViewModel();
@@ -65,18 +67,27 @@ var Location = function(data) {
 
     // create a ko observable for the map marker
     this.marker = ko.observable(marker);
+
     google.maps.event.addListener(marker, 'click', function(){
         viewModel.markerClicked(self);
     });
 
     // hides the map marker by setting it's map paramter to null
     this.hideMarker = function() {
-        this.marker().setMap(null);
+        self.marker().setMap(null);
     };
 
     // shows the map marker
     this.showMarker = function() {
-        this.marker().setMap(map);
+        self.marker().setMap(map);
+    };
+
+    this.toggleMarkerBounce = function() {
+        if (marker.getAnimation() === undefined || marker.getAnimation() === null) {
+            self.marker().setAnimation(google.maps.Animation.BOUNCE);
+        } else {
+            self.marker().setAnimation(null);
+        }
     };
 
     // creates and displays the info window for a map location
@@ -88,7 +99,7 @@ var Location = function(data) {
             console.log(data);
 
             // build the content string from the data
-            var poster_url = '/img/no-poster-available.jpg';
+            var poster_url = '/img/no-poster-available.jpg';  // placeholder poster art image
             var release_date = (self.release_year === undefined) ? '' : self.release_year;
             var overview = '';
 
@@ -103,6 +114,18 @@ var Location = function(data) {
                 overview = results.overview;
             } else {
                 console.log('no results for selected item.');
+            }
+
+            // build up the actors string
+            var actors;
+            if (self.actor_1 !== undefined) {
+                actors = self.actor_1;
+            }
+            if (self.actor_2 !== undefined) {
+                actors += (', ' + self.actor_2);
+            }
+            if (self.actor_3 !== undefined) {
+                actors += (', ' + self.actor_3);
             }
 
              // build the content string from the data
@@ -124,13 +147,7 @@ var Location = function(data) {
                                 '<p> <strong>Distributor: </strong>' + self.distributor + '</p>' +
                                 '<p> <strong>Production Company: </strong>' + self.production_company + '</p>' +
                                 ((self.director === undefined) ? '' : '<p> <strong>Directed by: </strong>' + self.director + '</p>') +
-                                '<p> <strong>Starring:</strong>' +
-                                    '<ul class="actor-list">' +
-                                        ((self.actor_1 === undefined) ? '' : '<li>' + self.actor_1 + '</li>') +
-                                        ((self.actor_2 === undefined) ? '' : '<li>' + self.actor_2 + '</li>') +
-                                        ((self.actor_3 === undefined) ? '' : '<li>' + self.actor_3 + '</li>') +
-                                    '</ul>' +
-                                '</p>' +
+                                '<p> <strong>Starring:</strong> ' + actors + '</p>' +
                                 '<p> <strong>Overview: </strong>' + overview + '</p>' +
                             '</div' +
                         '</div>' +
@@ -139,11 +156,12 @@ var Location = function(data) {
                     '</div>' +
                 '</div>';
 
-            // set the content on the info window
-            infowindow = new google.maps.InfoWindow({
-                content: content
-            });
-            infowindow.open(map, marker);
+                // set the content on the info window
+                infowindow = new google.maps.InfoWindow({
+                    content: content
+                });
+                infowindow.open(map, marker);
+                viewModel.setInfoWindow(infowindow);
 
         }, function(Error) {
             console.log(Error);
@@ -197,11 +215,18 @@ var ViewModel = function() {
     // set the current location
     this.currentLocation = ko.observable( this.locations()[0] );
 
+    // this makes sure only one infowindow is open at a time
+    this.setInfoWindow = function(infowindow){
+        if (self.infowindow !== undefined) {
+            self.infowindow().close();
+        }
+        self.infowindow = ko.observable(infowindow);
+    };
+
     // handles a click on a list item
     this.locationClicked = function(location) {
-        console.log('ViewModel: location clicked!');
 
-        console.log(this);
+        // console.log(this);
 
         // clear any marker that is currently bouncing.
         self.currentLocation().marker().setAnimation(null);
@@ -209,31 +234,30 @@ var ViewModel = function() {
         // update the current location
         self.currentLocation(this);
 
-        // make the selected location marker bounce
-        location.marker().setAnimation(google.maps.Animation.BOUNCE);
+        // toggle marker bounce
+        location.toggleMarkerBounce();
 
         // center the map on the marker location
         location.marker().map.setCenter(location.marker().position);
 
+        // load the content and display info
         location.createInfoContent();
     };
 
     // handles a click on a map marker
     this.markerClicked = function(location) {
-        console.log(location);
 
-        var marker = location.marker();
-        console.log(marker);
+        // clear any marker that is currently bouncing.
+        self.currentLocation().marker().setAnimation(null);
 
+        // update the current location
+        self.currentLocation(location);
+
+        // load the content and display info
         location.createInfoContent();
 
-        // toggle the bounce animation
-        if (marker.getAnimation() !== null) {
-            marker.setAnimation(null);
-        } else {
-            console.log('bouncy marker');
-            marker.setAnimation(google.maps.Animation.BOUNCE);
-        }
+        // toggle marker bounce
+        location.toggleMarkerBounce();
     };
 
     // uses a regular expression to match by location title
