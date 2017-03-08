@@ -3,37 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <title>SF Film Locations</title>
-
-    <link rel="stylesheet"  href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <!-- <link rel="stylesheet"  href="../bower_components/bootstrap/dist/css/bootstrap.min.css"> -->
     <link rel="stylesheet"  href="css/main.css">
 </head>
 <body>
   <div class="container">
     <div class="page-header">
       <h1>San Francisco Film Locations</h1>
+      <small>Film location data provided by <a href="https://data.sfgov.org/">SF OpenData</a></small>
+      <br/>
+      <small>Movie metadata provided by <a href="https://www.themoviedb.org">TMDb</a></small>
     </div>
 
+    <!-- <button type="button" class="btn btn-default" id="toggle-button">Toggle</button> -->
+
     <div class="row" id="search">
-      <div class="col-md-12">
+      <div class="col-12">
         <input class="form-control" placeholder="Search for a film" data-bind="textInput: filmSearch">
       </div>
     </div>
 
     <section class="row">
-      <div class="col-md-3" id="titles">
+      <div class="col-2" id="titles">
+          <label class="col-12">Films</label>
           <ul class="list-group" id="title-list" data-bind="foreach: filteredList">
             <li class="list-group-item" data-bind="text: title, click: $parent.locationClicked"></li>
           </ul>
-
       </div>
-      <div class="col-md-9" id="map"></div>
     </section>
 
-    <footer>
-      <div class="col-md-12">Film location data provided by <a href="https://data.sfgov.org/">SF OpenData</a> </div>
-      <div class="col-md-12">Movie metadata provided by <a href="https://www.themoviedb.org">TMDb</a> </div>
-    </footer>
-
+    <div class="col-12" id="map"></div>
   </div>
 
   <!-- Knockout -->

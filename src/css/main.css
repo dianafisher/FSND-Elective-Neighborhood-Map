@@ -1,13 +1,160 @@
 
-#title-list {
-    max-height: 692px;
-    overflow: scroll;
+body {
+    font-family: "Roboto", sans-serif;
+    color: #525f6b;
 }
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  color: #F57C00;
+  text-decoration: none;
+}
+
+a:hover,
+a:focus {
+  color: #01579B;
+  text-decoration: underline;
+}
+
+label {
+  display: block;
+  font-size: 20px;
+  padding-bottom: 10px;
+  padding-left: 5px;
+}
+
+/*
+ * Grid
+ */
+
+.grid {
+  margin: 0 auto;
+  /*max-width: 1200px;*/
+  width: 100%;
+}
+
+.row {
+  width: 100%;
+  margin-bottom: 20px;
+  /*display: flex;*/
+}
+
+.trimmed {
+  margin-bottom: 0;
+}
+
+.col-12 {
+    width: 100%;
+}
+
+.col-11 {
+    width: 91.66667%;
+}
+
+.col-10 {
+    width: 83.33333%;
+}
+
+.col-9 {
+    width: 75%;
+}
+
+.col-8 {
+    width: 66.66667%;
+}
+
+.col-7 {
+    width: 58.33333%;
+}
+
+.col-6 {
+    width: 50%;
+}
+
+.col-5 {
+    width: 41.66667%;
+}
+
+.col-4 {
+    width: 33.33333%;
+}
+
+.col-3 {
+    width: 25%;
+}
+
+.col-2 {
+    width: 16.66667%;
+}
+
+.col-1 {
+    width: 8.33333%;
+}
+
+.col-offset-6 {
+    margin-left: 50%;
+}
+
+/*
+ * Form
+ */
+
+.form-control {
+  display: block;
+  width: 50%;
+  height: 20px;
+  padding: 6px 12px;
+  font-size: 16px;
+  color: #555;
+  background-image: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.form-control:focus {
+  border-color: #89cada;
+  outline: 0;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+textarea.form-control {
+  height: 400px;
+}
+
+
+/*
+**/
+
+.page-header {
+    margin-bottom: 10px;
+}
+
+#title-list {
+    max-height: 660px;
+    overflow: scroll;
+    padding: 2px;
+}
+
 #titles {
-    /*z-index: 10000;*/
-    /*position: absolute;*/
-    /*top: 119px;*/
+    z-index: 10000;
+    position: absolute;
+    top: 183px;
     background: white;
+    transition-duration: 0.3s;
+    left: 8px;
+    /*left: -360px;*/
+}
+
+#titles.on {
+    left: 8px;
 }
 
 #map {
@@ -16,8 +163,24 @@
     /*width: 100%;*/
 }
 
+.list-group-item {
+    padding: 10px 15px;
+    margin-bottom: -1px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+
+.list-group-item:hover,
+.list-group-item:active,
+.list-group-item:focus {
+  z-index: 2;
+  color: #fff;
+  background-color: #005f83;
+  border-color: #005f83;
+}
+
 .poster_image {
-    height: 300px;
+    height: 200px;
 }
 
 .actor-list {
@@ -27,3 +190,6 @@
 section {
     margin-top: 20px;
 }
+
+/* breakpoints */
+

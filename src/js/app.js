@@ -6,6 +6,12 @@ var styles = [{"featureType":"landscape.man_made","elementType":"geometry.fill",
 
 var map;
 
+var list = document.getElementById('titles');
+// var button = document.getElementById('toggle-button');
+// button.addEventListener('click', function() {
+//     list.classList.toggle('on');
+// });
+
 function initMap() {
 
   var center = new google.maps.LatLng(37.7877034,-122.4319239);
@@ -14,7 +20,12 @@ function initMap() {
   var mapOptions = {
     zoom: 13,
     center: center,
-    styles: styles
+    styles: styles,
+    mapTypeControl: true,
+    mapTypeControlOptions: {
+      style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+      position: google.maps.ControlPosition.TOP_RIGHT
+    },
   };
 
   map = new google.maps.Map(document.getElementById("map"), mapOptions);
