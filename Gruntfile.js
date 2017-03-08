@@ -113,7 +113,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-browser-sync');
 
     // Default task.
-    grunt.registerTask('default', ['jshint', 'clean', 'concat', 'uglify']);
-    grunt.registerTask('preview', ['connect:development']);
-    grunt.registerTask("dev", ["browserSync", "watch"]);
+    // grunt.registerTask('default', ['jshint', 'clean', 'concat', 'uglify']);
+    // grunt.registerTask('preview', ['connect:development']);
+    grunt.registerTask("default", ["browserSync", "watch"]);
 };

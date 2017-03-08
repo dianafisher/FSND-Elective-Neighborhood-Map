@@ -8,8 +8,7 @@
   },
   "author": {
     "name": "Diana Fisher",
-    "email": "diana.fisher@gmail.com",
-    "url": "http://example.com"
+    "email": "diana.fisher@gmail.com"
   },
   "devDependencies": {
     "grunt": "~0.4.5",
