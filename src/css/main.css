@@ -154,12 +154,13 @@ textarea.form-control {
 }
 
 #titles.off {
-    left: -258px;
+    left: -300px;
 }
 
 #map {
     /*height: 100vh;*/
     height: 700px;
+    /*height: 100%;*/
     /*width: 100%;*/
 }
 
@@ -339,9 +340,18 @@ section {
 
 @media screen and (max-width: 475px) {
     h1 {
-        font-size: 1.75em;
+        font-size: 1.5em;
     }
     #titles {
-        top: 172px;
+        top: 210px;
+    }
+    #title-list {
+      max-height: 60vh;
+    }
+    #map {
+      height: 70vh;
+    }
+    .poster_image {
+      height: 100px;
     }
 }

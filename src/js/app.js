@@ -25,7 +25,6 @@ function initMap() {
 
   map = new google.maps.Map(document.getElementById("map"), mapOptions);
   google.maps.event.addDomListener(window, 'load', mapLoaded);
-
 }
 
 // handles any errors in loading the map
@@ -139,7 +138,7 @@ var Location = function(data) {
             // set the content on the info window
             infowindow = new google.maps.InfoWindow({
                 content: content,
-                maxWidth: 400
+                maxWidth: 300
             });
             infowindow.open(map, marker);
             viewModel.setInfoWindow(infowindow);
