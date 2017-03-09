@@ -55,18 +55,29 @@ function mapLoaded(){
 var Location = function(data) {
     var self = this;
 
-    this.actor_1 = data.actor_1;
-    this.actor_2 = data.actor_2;
-    this.actor_3 = data.actor_3;
+    this.actors = [];
+    if (data.actor_1 !== undefined) {
+        this.actors.push(data.actor_1);
+    }
+    if (data.actor_2 !== undefined) {
+        this.actors.push(data.actor_2);
+    }
+    if (data.actor_3 !== undefined) {
+        this.actors.push(data.actor_3);
+    }
+
     this.director = data.director;
     this.distributor = data.distributor;
-    this.fun_facts = data.fun_facts;
+    this.funFacts = data.fun_facts;
     this.locations = data.locations;
-    this.place_id = data.place_id;
-    this.production_company = data.production_company;
-    this.release_year = data.release_year;
+    this.placeId = data.place_id;
+    this.productionCompany = data.production_company;
+    this.releaseYear = data.release_year;
     this.title = data.title;
     this.writer = data.writer;
+
+    this.posterUrl = '/img/no-poster-available.jpg';  // placeholder poster art image
+    this.overview = '';
 
     this.lat = ko.observable(data.geometry.location.lat);
     this.lng = ko.observable(data.geometry.location.lng);
@@ -107,7 +118,45 @@ var Location = function(data) {
         }
     };
 
-    // creates and displays the info window for a map location
+    this.displayInfo = function() {
+        // display the infowindow
+        var content =
+            '<div class="panel panel-info" id="content">' +
+                '<div class="panel-heading">' +
+                    '<h3 class="panel-title">' +  self.title + '</h3>' +
+                '</div>' +
+                '<div class="panel-body">' +
+                    '<div class="media">' +
+                        '<div class="media-center">' +
+                            '<img class="media-object poster_image" src="' + self.posterUrl + '" alt="movie poster art">' +
+                        '</div>' +
+                        '<div class="media-body">' +
+                            '<p> <strong>Location: </strong>' + self.locations + '</p>' +
+                            '<p> <strong>Address: </strong>' + self.address() + '</p>' +
+                            ((self.funFacts === undefined) ? '<p></p>' : '<p> <strong>Fun Facts: </strong>' + self.funFacts) + '</p>' +
+                            '<p> <strong>Released: </strong>' + self.releaseDate + '</p>' +
+                            '<p> <strong>Distributor: </strong>' + self.distributor + '</p>' +
+                            '<p> <strong>Production Company: </strong>' + self.productionCompany + '</p>' +
+                            ((self.director === undefined) ? '' : '<p> <strong>Directed by: </strong>' + self.director + '</p>') +
+                            '<p> <strong>Starring:</strong> ' + self.actors.join() + '</p>' +
+                            '<p> <strong>Overview: </strong>' + self.overview + '</p>' +
+                        '</div' +
+                    '</div>' +
+
+                    '<div id="siteNotice"></div>' +
+                '</div>' +
+            '</div>';
+
+            // set the content on the info window
+            infowindow = new google.maps.InfoWindow({
+                content: content,
+                maxWidth: 400
+            });
+            infowindow.open(map, marker);
+            viewModel.setInfoWindow(infowindow);
+    };
+
+    // calls the TMDb API to get additional information about a film.
     this.createInfoContent = function() {
         // load data from the The Movie Database API
         self.loadData().then(function(response){
@@ -115,73 +164,24 @@ var Location = function(data) {
             var data = JSON.parse(response);
             // console.log(data);
 
-            // build the content string from the data
-            var poster_url = '/img/no-poster-available.jpg';  // placeholder poster art image
-            var release_date = (self.release_year === undefined) ? '' : self.release_year;
-            var overview = '';
-
             var results = data.results[0];
             if (results !== undefined) {
                 // build the poster url
                 var poster = results.poster_path;
-                poster_url = 'https://image.tmdb.org/t/p/original/' + poster;
+                self.posterUrl = 'https://image.tmdb.org/t/p/original/' + poster;
 
-                release_date = results.release_date;
-                overview = results.overview;
+                self.releaseDate = results.release_date;
+                self.overview = results.overview;
             } else {
                 console.log('no results for selected item.');
             }
-
-            // build up the actors string
-            var actors;
-            if (self.actor_1 !== undefined) {
-                actors = self.actor_1;
-            }
-            if (self.actor_2 !== undefined) {
-                actors += (', ' + self.actor_2);
-            }
-            if (self.actor_3 !== undefined) {
-                actors += (', ' + self.actor_3);
-            }
-
-             // build the content string from the data
-            content =
-                '<div class="panel panel-info" id="content">' +
-                    '<div class="panel-heading">' +
-                        '<h3 class="panel-title">' +  self.title + '</h3>' +
-                    '</div>' +
-                    '<div class="panel-body">' +
-                        '<div class="media">' +
-                            '<div class="media-center">' +
-                                '<img class="media-object poster_image" src="' + poster_url + '" alt="movie poster art">' +
-                            '</div>' +
-                            '<div class="media-body">' +
-                                '<p> <strong>Location: </strong>' + self.locations + '</p>' +
-                                '<p> <strong>Address: </strong>' + self.address() + '</p>' +
-                                ((self.fun_facts === undefined) ? '<p></p>' : '<p> <strong>Fun Facts: </strong>' + self.fun_facts) + '</p>' +
-                                '<p> <strong>Released: </strong>' + release_date + '</p>' +
-                                '<p> <strong>Distributor: </strong>' + self.distributor + '</p>' +
-                                '<p> <strong>Production Company: </strong>' + self.production_company + '</p>' +
-                                ((self.director === undefined) ? '' : '<p> <strong>Directed by: </strong>' + self.director + '</p>') +
-                                '<p> <strong>Starring:</strong> ' + actors + '</p>' +
-                                '<p> <strong>Overview: </strong>' + overview + '</p>' +
-                            '</div' +
-                        '</div>' +
-
-                        '<div id="siteNotice"></div>' +
-                    '</div>' +
-                '</div>';
-
-                // set the content on the info window
-                infowindow = new google.maps.InfoWindow({
-                    content: content,
-                    maxWidth: 400
-                });
-                infowindow.open(map, marker);
-                viewModel.setInfoWindow(infowindow);
+            // show the info window
+            self.displayInfo();
 
         }, function(Error) {
             console.log(Error);
+            // if the entire request fails, just show the info window with the data we have from SF Open only.
+            self.displayInfo();
         });
     };
 
