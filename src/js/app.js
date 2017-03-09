@@ -9,8 +9,13 @@ var map;
 
 var list = document.getElementById('titles');
 var button = document.getElementById('toggle-button');
+
 button.addEventListener('click', function() {
     list.classList.toggle('off');
+
+    // change the text on the button
+    var text = button.firstChild;
+    text.data = text.data === "<" ? ">" : "<";
 });
 
 function initMap() {
