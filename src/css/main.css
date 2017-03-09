@@ -1,7 +1,29 @@
+/** {
+    border: 1px solid red !important;
+}
+
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+}*/
+
+html, body {
+   height: 100%;
+}
 
 body {
     font-family: "Roboto", sans-serif;
     color: #525f6b;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+#container {
+   display: flex;
+   min-height: 100%;
 }
 
 ul {
@@ -42,10 +64,6 @@ label {
   width: 100%;
   margin-bottom: 20px;
   /*display: flex;*/
-}
-
-.trimmed {
-  margin-bottom: 0;
 }
 
 .col-12 {
@@ -96,17 +114,13 @@ label {
     width: 8.33333%;
 }
 
-.col-offset-6 {
-    margin-left: 50%;
-}
-
 /*
  * Form
  */
 
 .form-control {
   display: block;
-  width: 50%;
+  width: 90%;
   height: 20px;
   padding: 6px 12px;
   font-size: 16px;
@@ -138,7 +152,7 @@ textarea.form-control {
 }
 
 #title-list {
-    max-height: 662px;
+    max-height: 90vh;
     overflow: scroll;
     padding: 2px;
 }
@@ -329,24 +343,72 @@ section {
     margin-top: 20px;
 }
 
-.slider {
-    height: 36px;
+/*
+ Inspired by http://www.cssportal.com/blog/css-slide-in-menu/
+**/
+
+input[type=checkbox] {
+   position: absolute;
+   opacity: 0;
+}
+label {
+   position: absolute;
+   top: 0;
+   left: 25px;
+   z-index: 1;
+   display: block;
+   font-size:3em;
+   color: #444;
+   cursor: pointer;
+   transform: translate3d(0, 0, 0);
+   transition: transform .4s;
+}
+input[type=checkbox]:checked ~ label {
+   transform: translate3d(250px, 0, 0) rotate(90deg);
+}
+.content {
+   width:100%;
+   padding: 40px;
+   background: #f2f2f2;
+   transform: translate3d(0, 0, 0);
+   transition: transform .4s;
+}
+input[type=checkbox]:checked ~ .content {
+   transform: translate3d(250px, 0, 0);
+}
+input[type=checkbox]:checked ~ .slide-menu {
+   transform: translate3d(0, 0, 0);
+}
+input[type=checkbox]:checked ~ .slide-menu .menu li {
+   width: 100%;
+}
+.slide-menu {
+   transform: translate3d(-250px, 0, 0);
+   position: absolute;
+   width: 250px;
+   background: #89cada;
+   left: 0;
+   height: 100%;
+   transition: all .4s;
+}
+.slide-menu h1 {
+   margin: 10px;
 }
 
-#toggle-button {
-    float: right;
-    margin-right: 3px;
-}
+/*
+  Breakpoints
+**/
 
 @media screen and (max-width: 475px) {
     h1 {
         font-size: 1.5em;
     }
     #titles {
-        top: 210px;
+        top: 233px;
     }
     #title-list {
-      max-height: 60vh;
+      /*max-height: 290px;*/
+      max-height: 90vh;
     }
     #map {
       height: 70vh;
@@ -355,3 +417,4 @@ section {
       height: 100px;
     }
 }
+
