@@ -7,17 +7,6 @@ var styles = [{"featureType":"landscape.man_made","elementType":"geometry.fill",
 
 var map;
 
-var list = document.getElementById('titles');
-var button = document.getElementById('toggle-button');
-
-button.addEventListener('click', function() {
-    list.classList.toggle('off');
-
-    // change the text on the button
-    var text = button.firstChild;
-    text.data = text.data === "<" ? ">" : "<";
-});
-
 function initMap() {
 
   var center = new google.maps.LatLng(37.7877034,-122.4319239);
@@ -138,7 +127,7 @@ var Location = function(data) {
                             '<p> <strong>Distributor: </strong>' + self.distributor + '</p>' +
                             '<p> <strong>Production Company: </strong>' + self.productionCompany + '</p>' +
                             ((self.director === undefined) ? '' : '<p> <strong>Directed by: </strong>' + self.director + '</p>') +
-                            '<p> <strong>Starring:</strong> ' + self.actors.join() + '</p>' +
+                            '<p> <strong>Starring:</strong> ' + self.actors.join(', ') + '</p>' +
                             '<p> <strong>Overview: </strong>' + self.overview + '</p>' +
                         '</div' +
                     '</div>' +
@@ -218,6 +207,7 @@ var ViewModel = function() {
     // store the outer 'this' parameter which represents the ViewModel
     var self = this;
 
+    this.direction = ko.observable('>');
     this.locations = ko.observableArray([]);
 
     this.filteredList = ko.observableArray([]);
@@ -228,6 +218,19 @@ var ViewModel = function() {
     locations.forEach(function(loc){
         self.locations.push( new Location(loc) );
     });
+
+    this.sliderStatus = ko.observable('on');
+
+    // switches the direction of the slider arrow
+    this.arrowClicked = function(){
+        var arrow = self.direction();
+        arrow = arrow === '<' ? '>' : '<';
+        self.direction(arrow);
+
+        var status = self.sliderStatus();
+        status = status === 'on' ? 'off' : 'on';
+        self.sliderStatus(status);
+    };
 
     // set the current location
     this.currentLocation = ko.observable( this.locations()[0] );
