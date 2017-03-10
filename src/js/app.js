@@ -44,15 +44,10 @@ var Location = function(data) {
     var self = this;
 
     this.actors = [];
-    if (data.actor_1 !== undefined) {
-        this.actors.push(data.actor_1);
-    }
-    if (data.actor_2 !== undefined) {
-        this.actors.push(data.actor_2);
-    }
-    if (data.actor_3 !== undefined) {
-        this.actors.push(data.actor_3);
-    }
+    data.actor_1 && this.actors.push(data.actor_1);
+    data.actor_2 && this.actors.push(data.actor_2);
+    data.actor_3 && this.actors.push(data.actor_3);
+
 
     this.director = data.director;
     this.distributor = data.distributor;
@@ -67,13 +62,13 @@ var Location = function(data) {
     this.posterUrl = '/img/no-poster-available.jpg';  // placeholder poster art image
     this.overview = '';
 
-    this.lat = ko.observable(data.geometry.location.lat);
-    this.lng = ko.observable(data.geometry.location.lng);
-    this.address = ko.observable(data.formatted_address);
+    this.lat = data.geometry.location.lat;
+    this.lng = data.geometry.location.lng;
+    this.address = data.formatted_address;
 
     var image = 'img/movie.png';
 
-    var coords = new google.maps.LatLng(this.lat(), this.lng());
+    var coords = new google.maps.LatLng(this.lat, this.lng);
     var marker = new google.maps.Marker({
         position: coords,
         map: map,
@@ -120,7 +115,7 @@ var Location = function(data) {
                         '</div>' +
                         '<div class="media-body">' +
                             '<p> <strong>Location: </strong>' + self.locations + '</p>' +
-                            '<p> <strong>Address: </strong>' + self.address() + '</p>' +
+                            '<p> <strong>Address: </strong>' + self.address + '</p>' +
                             ((self.funFacts === undefined) ? '<p></p>' : '<p> <strong>Fun Facts: </strong>' + self.funFacts) + '</p>' +
                             '<p> <strong>Released: </strong>' + self.releaseDate + '</p>' +
                             '<p> <strong>Distributor: </strong>' + self.distributor + '</p>' +
