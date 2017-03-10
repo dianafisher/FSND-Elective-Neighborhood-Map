@@ -49,15 +49,15 @@ var Location = function(data) {
     data.actor_3 && this.actors.push(data.actor_3);
 
 
-    this.director = data.director;
-    this.distributor = data.distributor;
-    this.funFacts = data.fun_facts;
-    this.locations = data.locations;
+    this.director = data.director || 'Not Provided';
+    this.distributor = data.distributor || 'Not Provided';
+    this.funFacts = data.fun_facts || 'None Provided';
+    this.locations = data.locations || 'Not Provided';
     this.placeId = data.place_id;
-    this.productionCompany = data.production_company;
-    this.releaseYear = data.release_year;
-    this.title = data.title;
-    this.writer = data.writer;
+    this.productionCompany = data.production_company || 'Not Provided';
+    this.releaseYear = data.release_year || 'Not Provided';
+    this.title = data.title || 'Unknown';
+    this.writer = data.writer || 'Not Provided';
 
     this.posterUrl = '/img/no-poster-available.jpg';  // placeholder poster art image
     this.overview = '';
@@ -103,6 +103,10 @@ var Location = function(data) {
 
     this.displayInfo = function() {
         // display the infowindow
+
+        var releaseDate = self.release_date || self.releaseYear;
+        var overview = self.overview || 'Data Not Available';
+
         var content =
             '<div class="panel panel-info" id="content">' +
                 '<div class="panel-heading">' +
@@ -116,13 +120,13 @@ var Location = function(data) {
                         '<div class="media-body">' +
                             '<p> <strong>Location: </strong>' + self.locations + '</p>' +
                             '<p> <strong>Address: </strong>' + self.address + '</p>' +
-                            ((self.funFacts === undefined) ? '<p></p>' : '<p> <strong>Fun Facts: </strong>' + self.funFacts) + '</p>' +
-                            '<p> <strong>Released: </strong>' + self.releaseDate + '</p>' +
+                            '<p> <strong>Fun Facts: </strong>' + self.funFacts + '</p>' +
+                            '<p> <strong>Released: </strong>' + releaseDate + '</p>' +
                             '<p> <strong>Distributor: </strong>' + self.distributor + '</p>' +
                             '<p> <strong>Production Company: </strong>' + self.productionCompany + '</p>' +
-                            ((self.director === undefined) ? '' : '<p> <strong>Directed by: </strong>' + self.director + '</p>') +
+                            '<p> <strong>Directed by: </strong>' + self.director + '</p>' +
                             '<p> <strong>Starring:</strong> ' + self.actors.join(', ') + '</p>' +
-                            '<p> <strong>Overview: </strong>' + self.overview + '</p>' +
+                            '<p> <strong>Overview: </strong>' + overview + '</p>' +
                         '</div' +
                     '</div>' +
 
