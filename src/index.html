@@ -14,27 +14,40 @@
 </head>
 <body>
   <div id="container">
-    <input id="toggle" type="checkbox"><label for="toggle">&equiv;</label>
-    <div class="content">
-      <div class="page-header">
-        <h1>San Francisco Film Locations</h1>
-        <small>Film location data provided by <a href="https://data.sfgov.org/">SF OpenData</a></small>
-        <br/>
-        <small>Movie metadata provided by <a href="https://www.themoviedb.org">TMDb</a></small>
-      </div>
-      <div class="row" id="search">
-        <div>
-          <input class="form-control" placeholder="Search for a film" data-bind="textInput: filmSearch">
-        </div>
-    </div>
-    <div class="col-12" id="map"></div>
+
+      <input id="toggle" type="checkbox"><label for="toggle">&equiv;</label>
+
+      <div class="content">
+
+        <header class="page-header">
+          <h1>San Francisco Film Locations</h1>
+          <small>Film location data provided by <a href="https://data.sfgov.org/">SF OpenData</a></small>
+          <br/>
+          <small>Movie metadata provided by <a href="https://www.themoviedb.org">TMDb</a></small>
+        </header>
+
+        <main>
+          <article>
+            <div class="row" id="search">
+              <div>
+                <input class="form-control" placeholder="Search for a film" data-bind="textInput: filmSearch">
+              </div>
+            </div>
+          </article>
+          <article>
+            <div class="col-12" id="map"></div>
+          </article>
+        </main>
+
   </div>
-  <div class="slide-menu">
+
+  <aside class="slide-menu">
     <h1>Films</h1>
     <ul class="list-group" id="title-list" data-bind="foreach: filteredList">
       <li class="list-group-item" data-bind="text: title, click: $parent.locationClicked"></li>
     </ul>
-  </div>
+  </aside>
+
 </div>
 
   <!-- Knockout -->
